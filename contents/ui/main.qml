@@ -17,11 +17,11 @@
 
 import QtQuick 2.2
 import QtQuick.Layouts 1.1
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components as PlasmaComponents3
 
-Item {
+PlasmoidItem {
     id: main
 
     Layout.minimumWidth: !vertical ? minimumLength : -1
@@ -34,10 +34,8 @@ Item {
 
     readonly property bool vertical: plasmoid.location === PlasmaCore.Types.Vertical
     readonly property bool hidden: plasmoid.location !== PlasmaCore.Types.Planar
-                                   && (!containmentInterface
-                                       || (containmentInterface && containmentInterface.hasOwnProperty("editMode") && !containmentInterface.editMode)) /*Plasma>=5.18*/
-                                       //! deprecated code for historical reference, Plasma <= 5.17
-                                       //!/|| (containmentInterface && containmentInterface.immutability === PlasmaCore.Types.UserImmutable))
+                                   && (!plasmoid.containment
+                                       || (plasmoid.containment && !plasmoid.containment.corona.editMode))
 
     readonly property int minimumLength: {
         if (hidden) {
@@ -47,10 +45,8 @@ Item {
         return !vertical ? transparencySwitch.implicitWidth + 8 : transparencySwitch.height + 8
     }
 
-    property Item containmentInterface
-
-    Plasmoid.preferredRepresentation: Plasmoid.fullRepresentation
-    Plasmoid.status: containmentInterface && hidden ? PlasmaCore.Types.HiddenStatus : PlasmaCore.Types.PassiveStatus
+    preferredRepresentation: fullRepresentation
+    Plasmoid.status: plasmoid.containment  && hidden ? PlasmaCore.Types.HiddenStatus : PlasmaCore.Types.PassiveStatus
     Plasmoid.onActivated: switchTransparency()
 
     Component.onCompleted: initializeAppletTimer.start()
@@ -67,44 +63,18 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        checked:  containmentInterface ? containmentInterface.backgroundHints === PlasmaCore.Types.NoBackground : plasmoid.configuration.transparencyEnabled
+        checked:  plasmoid.containment ? plasmoid.containment.backgroundHints === PlasmaCore.Types.NoBackground : plasmoid.configuration.transparencyEnabled
         onClicked: switchTransparency()
     }
 
-    function typeOf(obj, className){
-        var name = obj.toString();
-        return ((name.indexOf(className + "(") === 0) || (name.indexOf(className + "_QML") === 0));
-    }
-
     function applyTransparency() {
-        if (containmentInterface) {
+        if (plasmoid.containment) {
             var newState = plasmoid.configuration.transparencyEnabled ? PlasmaCore.Types.NoBackground : PlasmaCore.Types.DefaultBackground;
-            containmentInterface.backgroundHints = newState;
-        }
-    }
-
-    function searchContainmentView() {
-        if (main.parent) {
-            var cItem = main.parent;
-            var level=0;
-
-            while(!containmentInterface && cItem && level<14) {
-                if (typeOf(cItem,"ContainmentInterface")) {
-                    console.log(" Transparency Button Applet :: ContainmentInterface found...");
-                    containmentInterface = cItem;
-                }
-
-                cItem = cItem.parent;
-                level = level + 1;
-            }            
+            plasmoid.containment.backgroundHints = newState;
         }
     }
 
     function switchTransparency() {
-        if (!containmentInterface) {
-            searchContainmentView();
-        }
-
         plasmoid.configuration.transparencyEnabled = !plasmoid.configuration.transparencyEnabled;
         applyTransparency();
     }
@@ -118,8 +88,7 @@ Item {
         readonly property int maxStep:4
 
         onTriggered: {
-            main.searchContainmentView();
-            if (containmentInterface) {
+            if (plasmoid.containment) {
                 applyTransparency();
             } else if (step<maxStep) {
                 step = step + 1;
