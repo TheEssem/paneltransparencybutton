@@ -1,5 +1,8 @@
 ### CHANGELOG
 
+#### Version 0.3 (unofficial)
+* port to Plasma 6
+
 #### Version 0.2
 * support only Plasma Desktop>=5.18
 

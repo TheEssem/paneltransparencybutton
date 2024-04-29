@@ -1,6 +1,6 @@
-# Panel Transparency Button
+# Panel Transparency Button (Plasma 6 Port)
 
-Plasma 5 applet that enables/disables transparency for plasma panels. Plasma 5.17.3 is required to work correctly and enable/disable panel shadows when needed.
+Plasma 6 applet that enables/disables transparency for panels. This is a fork of the original Plasma 5 applet by [psifidotos](https://github.com/psifidotos/paneltransparencybutton).
 
 <p align="center">
 <img src="https://imgur.com/0VPE3MF.gif" width="660"><br/>
@@ -19,18 +19,8 @@ Plasma 5 applet that enables/disables transparency for plasma panels. Plasma 5.1
 
 # How To Use
 
-1. Unlock your widgets and add transparency button in a plasma panel
-2. Activate it and your plasma panel will become completely transparent without altering your plasma theme files.
-3. Based on Plasma Desktop version
-- For Plasma >= 5.18, exit Configure Layout desktop mode in order to hide the transparency button completely
-- For Plasma <  5.18, lock your widgets in the end in order to hide the transparency button completely.
-
-# Requirements
-- v0.2.x [Plasma >= 5.18]
-- v0.1.x [Plasma < 5.18]
+Add the button widget to your panel and activate it. Your panel will become completely transparent; just exit the panel configuration mode to hide the button.
 
 # Install
 
-This is a QML applet and as such it can be easily installed from Plasma 5 Widgets Explorer or alternative you can execute `plasmapkg2 -i .` in the root directory of the applet.
-
-
+This is a QML applet and as such it can be easily installed from Discover or the "Get New" applet in System Settings. Alternatively, you can execute `kpackagetool6 -i .` in the root directory of the applet.

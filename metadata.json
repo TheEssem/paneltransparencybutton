@@ -3,12 +3,16 @@
     "KPlugin": {
         "Authors": [
             {
+                "Email": "essem@essem.space",
+                "Name": "Essem"
+            }
+            {
                 "Email": "mvourlakos@gmail.com",
                 "Name": "Michail Vourlakos"
             }
         ],
         "Category": "Utilities",
-        "Description": "an applet to enable/disable transparency for plasma panels",
+        "Description": "An applet to enable/disable transparency for Plasma panels",
         "Icon": "image-red-eye",
         "Id": "org.kde.paneltransparencybutton",
         "License": "GPL2",
